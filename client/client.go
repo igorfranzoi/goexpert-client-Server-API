@@ -10,18 +10,18 @@ import (
 	"time"
 )
 
-const LOCAL_HOST = "http://localhost:3030/cotacao"
+const LOCAL_HOST = "http://localhost:8080/cotacao"
 
 func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 300*time.Millisecond)
 	defer cancel()
 
-	valor, err := getServerPrice(ctx)
+	value, err := getServerPrice(ctx)
 	if err != nil {
 		log.Fatalf("erro [GET-client] - cotação: %v", err)
 	}
 
-	if err := writeInfoFile(valor); err != nil {
+	if err := writeInfoFile(value); err != nil {
 		log.Fatalf("problema ao salvar no arquivo: %v", err)
 	}
 
@@ -54,7 +54,7 @@ func getServerPrice(ctx context.Context) (string, error) {
 	return bodyResponse["bid"], nil
 }
 
-func writeInfoFile(valor string) error {
-	content := fmt.Sprintf("dolar: %s", valor)
+func writeInfoFile(value string) error {
+	content := fmt.Sprintf("dolar: %s", value)
 	return os.WriteFile("cotacao.txt", []byte(content), 0644)
 }
